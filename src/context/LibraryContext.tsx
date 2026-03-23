@@ -42,7 +42,7 @@ const LibraryContext = createContext<LibraryContextType | null>(null);
 export function LibraryProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<Member | null>(null);
   const [books, setBooks] = useState<Book[]>([]);
-  const [reserveSeconds, setReserveSeconds] = useState(3600);
+  const [reserveSeconds, setReserveSeconds] = useState(1200);
   const [hasActiveReservation, setHasActiveReservation] = useState(false);
   const [reservedBookTitle, setReservedBookTitle] = useState("");
   const [timerInterval, setTimerInterval] = useState<ReturnType<typeof setInterval> | null>(null);
@@ -149,7 +149,7 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
 
     // Insert reservation
     if (currentUser) {
-      const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString();
+      const expiresAt = new Date(Date.now() + 1200 * 1000).toISOString();
       await supabase.from("reservations").insert({
         member_id: currentUser.id,
         book_id: bookId,
@@ -162,7 +162,7 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
     if (book) {
       setReservedBookTitle(book.title);
       setHasActiveReservation(true);
-      setReserveSeconds(3600);
+      setReserveSeconds(1200);
     }
   }, [books, currentUser]);
 

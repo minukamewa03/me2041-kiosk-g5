@@ -23,6 +23,7 @@ export type Database = {
           rfid_tag: string
           status: Database["public"]["Enums"]["book_status"]
           title: string
+          slot_position: number | null
         }
         Insert: {
           author: string
@@ -32,6 +33,7 @@ export type Database = {
           rfid_tag: string
           status?: Database["public"]["Enums"]["book_status"]
           title: string
+          slot_position?: number | null
         }
         Update: {
           author?: string
@@ -41,6 +43,7 @@ export type Database = {
           rfid_tag?: string
           status?: Database["public"]["Enums"]["book_status"]
           title?: string
+          slot_position?: number | null
         }
         Relationships: []
       }
@@ -79,6 +82,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      kiosk_scans: {
+        Row: {
+          id: string
+          rfid_tag: string
+          scanned_at: string
+        }
+        Insert: {
+          id?: string
+          rfid_tag: string
+          scanned_at?: string
+        }
+        Update: {
+          id?: string
+          rfid_tag?: string
+          scanned_at?: string
+        }
+        Relationships: []
       }
       members: {
         Row: {

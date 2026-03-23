@@ -34,7 +34,7 @@ export default function MainApp() {
     setModalBookId(null);
     setSearchQuery("");
     setSearchResults(null);
-    toast.success("✓ Reservation confirmed! You have 1 hour.");
+    toast.success("✓ Reservation confirmed! You have 20 minutes to scan your ID at the Kiosk.");
   };
 
   const modalBook = modalBookId ? books.find(b => b.id === modalBookId) : null;
