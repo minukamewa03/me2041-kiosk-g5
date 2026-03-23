@@ -1,16 +1,8 @@
-import { useLibrary, LibraryProvider } from "@/context/LibraryContext";
+import { useLibrary } from "@/context/LibraryContext";
 import LoginPage from "@/components/LoginPage";
 import MainApp from "@/components/MainApp";
 
-function AppContent() {
+export default function Index() {
   const { currentUser } = useLibrary();
   return currentUser ? <MainApp /> : <LoginPage />;
-}
-
-export default function Index() {
-  return (
-    <LibraryProvider>
-      <AppContent />
-    </LibraryProvider>
-  );
 }
