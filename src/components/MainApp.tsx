@@ -51,6 +51,12 @@ export default function MainApp() {
           </h2>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => window.open('/kiosk', '_blank')}
+            className="bg-blue-500/10 border border-blue-500/30 text-blue-300 font-sans text-xs px-3.5 py-1.5 rounded-lg cursor-pointer transition-all hover:bg-blue-500/20 flex items-center gap-2"
+          >
+            Launch Kiosk Screen
+          </button>
           {currentUser?.is_admin && (
             <button
               onClick={() => window.location.href = '/admin'}
