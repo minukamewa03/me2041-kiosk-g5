@@ -1,0 +1,1 @@
+ALTER TABLE public.members ADD COLUMN rfid_tag text UNIQUE;
