@@ -20,8 +20,8 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-cream p-5 relative z-[1]">
       <div className="animate-rise bg-paper border border-border rounded-[20px] p-12 w-full max-w-[420px] shadow-[0_8px_40px_hsl(var(--shadow-color)/0.08),0_2px_8px_hsl(var(--shadow-color)/0.08)]">
-        <div className="text-center mb-9">
-          <span className="text-[40px] block mb-2.5">📚</span>
+        <div className="flex flex-col items-center text-center mb-9">
+          <img src="/logo.png" alt="UOM Logo" className="h-24 w-auto object-contain mb-4" />
           <h1 className="font-serif text-[28px] font-black text-ink tracking-tight">LibraKiosk</h1>
           <p className="text-[13px] text-muted-foreground mt-1 font-light">University of Moratuwa · Library Portal</p>
         </div>

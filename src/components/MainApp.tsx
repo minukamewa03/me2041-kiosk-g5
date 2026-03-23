@@ -44,10 +44,10 @@ export default function MainApp() {
     <div className="min-h-screen bg-paper relative z-[1]">
       {/* Header */}
       <header className="bg-ink text-cream px-10 flex items-center justify-between h-16 sticky top-0 z-[100]">
-        <div className="flex items-center gap-2.5">
-          <span className="text-xl">📚</span>
-          <h2 className="font-serif text-lg font-bold tracking-tight">
-            LibraKiosk <span className="text-[10px] text-[hsl(37_33%_92%/0.4)] font-mono ml-1">UOM</span>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="UOM Logo" className="h-9 w-auto object-contain" />
+          <h2 className="font-serif text-lg font-bold tracking-tight hidden sm:block">
+            LibraKiosk
           </h2>
         </div>
         <div className="flex items-center gap-4">

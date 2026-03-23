@@ -96,9 +96,11 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-paper relative z-[1]">
       <header className="bg-ink text-cream px-10 flex items-center justify-between h-16 sticky top-0 z-[100]">
-        <div className="flex items-center gap-2.5">
-          <span className="text-xl">📚</span>
-          <h2 className="font-serif text-lg font-bold tracking-tight">LibraKiosk <span className="text-[10px] text-accent-orange font-mono ml-1">ADMIN</span></h2>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="UOM Logo" className="h-9 w-auto object-contain" />
+          <h2 className="font-serif text-lg font-bold tracking-tight hidden sm:block">
+            LibraKiosk <span className="text-[10px] text-accent-orange font-mono ml-1">ADMIN</span>
+          </h2>
         </div>
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="text-cream hover:bg-white/10" onClick={() => window.location.href = '/'}>
