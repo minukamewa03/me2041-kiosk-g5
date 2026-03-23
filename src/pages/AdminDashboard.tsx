@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLibrary, Book } from "@/context/LibraryContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
@@ -23,6 +23,7 @@ export default function AdminDashboard() {
   const { currentUser, books } = useLibrary();
   const [members, setMembers] = useState<MemberData[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   
   // Student Form State
   const [openStudent, setOpenStudent] = useState(false);
@@ -147,7 +148,7 @@ export default function AdminDashboard() {
           </h2>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="text-cream hover:bg-white/10" onClick={() => window.location.href = '/'}>
+          <Button variant="ghost" className="text-cream hover:bg-white/10" onClick={() => navigate('/')}>
             Back to App
           </Button>
         </div>

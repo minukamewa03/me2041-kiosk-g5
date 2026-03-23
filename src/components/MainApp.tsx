@@ -5,6 +5,7 @@ import ReserveModal from "@/components/ReserveModal";
 import ReserveBanner from "@/components/ReserveBanner";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export default function MainApp() {
   const {
@@ -16,6 +17,7 @@ export default function MainApp() {
   const [searchType, setSearchType] = useState<"title" | "author">("title");
   const [searchResults, setSearchResults] = useState<typeof books | null>(null);
   const [modalBookId, setModalBookId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
     if (!searchQuery.trim()) {
@@ -59,7 +61,7 @@ export default function MainApp() {
           </button>
           {currentUser?.is_admin && (
             <button
-              onClick={() => window.location.href = '/admin'}
+              onClick={() => navigate('/admin')}
               className="bg-accent-orange border-none text-white font-sans text-xs px-3.5 py-1.5 rounded-lg cursor-pointer transition-all hover:bg-[#c95028]"
             >
               Admin Portal
