@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Edit2 } from "lucide-react";
 
 type MemberData = {
   id: string;
@@ -34,6 +35,10 @@ export default function AdminDashboard() {
     rfid_tag: "",
   });
 
+  // Edit Student Form State
+  const [openEditStudent, setOpenEditStudent] = useState(false);
+  const [editStudentForm, setEditStudentForm] = useState<MemberData | null>(null);
+
   // Book Form State
   const [openBook, setOpenBook] = useState(false);
   const [bookForm, setBookForm] = useState({
@@ -42,6 +47,10 @@ export default function AdminDashboard() {
     author: "",
     rfid_tag: "",
   });
+
+  // Edit Book Form State
+  const [openEditBook, setOpenEditBook] = useState(false);
+  const [editBookForm, setEditBookForm] = useState<Book | null>(null);
 
   const fetchMembers = async () => {
     setLoading(true);
@@ -100,6 +109,39 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUpdateStudent = async () => {
+    if (!editStudentForm) return;
+    const rfidRegex = /^[0-9a-fA-F]{12}$/;
+    
+    if (!editStudentForm.uni_id || !editStudentForm.name || !editStudentForm.rfid_tag) {
+      toast.error("All fields are required.");
+      return;
+    }
+    if (!rfidRegex.test(editStudentForm.rfid_tag)) {
+      toast.error("RFID must be a 12-digit hexadecimal string (e.g. A1B2C3D4E5F6)");
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from("members").update({
+        uni_id: editStudentForm.uni_id.trim(),
+        name: editStudentForm.name.trim(),
+        rfid_tag: editStudentForm.rfid_tag.trim().toUpperCase(),
+      }).eq('id', editStudentForm.id);
+
+      if (error) {
+        toast.error(`Error updating member: ${error.message}`);
+        return;
+      }
+
+      toast.success("Student updated successfully!");
+      setOpenEditStudent(false);
+      fetchMembers();
+    } catch (err) {
+      toast.error("An unexpected error occurred.");
+    }
+  };
+
   const handleRegisterBook = async () => {
     const rfidRegex = /^[0-9a-fA-F]{12}$/;
     
@@ -131,7 +173,39 @@ export default function AdminDashboard() {
       toast.success("Book registered successfully!");
       setOpenBook(false);
       setBookForm({ id: "", title: "", author: "", rfid_tag: "" });
-      // Reload page to re-fetch books inside context seamlessly
+      setTimeout(() => window.location.reload(), 800);
+    } catch (err) {
+      toast.error("An unexpected error occurred.");
+    }
+  };
+
+  const handleUpdateBook = async () => {
+    if (!editBookForm) return;
+    const rfidRegex = /^[0-9a-fA-F]{12}$/;
+    
+    if (!editBookForm.id || !editBookForm.title || !editBookForm.author || !editBookForm.rfid_tag) {
+      toast.error("All fields are required.");
+      return;
+    }
+    if (!rfidRegex.test(editBookForm.rfid_tag)) {
+      toast.error("RFID must be a 12-digit hexadecimal string (e.g. A1B2C3D4E5F6)");
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from("books").update({
+        title: editBookForm.title.trim(),
+        author: editBookForm.author.trim(),
+        rfid_tag: editBookForm.rfid_tag.trim().toUpperCase(),
+      }).eq('id', editBookForm.id); // Cannot change the ID itself for integrity
+
+      if (error) {
+        toast.error(`Error updating book: ${error.message}`);
+        return;
+      }
+
+      toast.success("Book updated successfully!");
+      setOpenEditBook(false);
       setTimeout(() => window.location.reload(), 800);
     } catch (err) {
       toast.error("An unexpected error occurred.");
@@ -213,13 +287,14 @@ export default function AdminDashboard() {
                     <TableHead className="font-serif font-bold text-foreground">Name</TableHead>
                     <TableHead className="font-serif font-bold text-foreground font-mono text-xs">RFID TAG</TableHead>
                     <TableHead className="font-serif font-bold text-foreground text-right">Role</TableHead>
+                    <TableHead className="font-serif font-bold text-foreground text-center">Edit</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
-                    <TableRow><TableCell colSpan={4} className="text-center py-10 text-muted-foreground">Loading members...</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center py-10 text-muted-foreground">Loading members...</TableCell></TableRow>
                   ) : members.length === 0 ? (
-                    <TableRow><TableCell colSpan={4} className="text-center py-10 text-muted-foreground">No students found.</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center py-10 text-muted-foreground">No students found.</TableCell></TableRow>
                   ) : (
                     members.map((m) => (
                       <TableRow key={m.id} className="hover:bg-secondary/20">
@@ -231,12 +306,47 @@ export default function AdminDashboard() {
                             {m.is_admin ? "Admin" : "Student"}
                           </span>
                         </TableCell>
+                        <TableCell className="text-center">
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-accent-orange" 
+                            onClick={() => { setEditStudentForm(m); setOpenEditStudent(true); }}>
+                            <Edit2 className="h-3 w-3" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
                 </TableBody>
               </Table>
             </div>
+            
+            {/* Edit Student Dialog */}
+            <Dialog open={openEditStudent} onOpenChange={setOpenEditStudent}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle className="font-serif text-xl border-b pb-4">Edit Student</DialogTitle>
+                </DialogHeader>
+                {editStudentForm && (
+                  <div className="grid gap-4 py-4">
+                    <div className="gap-2 flex flex-col">
+                      <Label className="text-xs font-mono uppercase text-muted-foreground">University ID</Label>
+                      <Input value={editStudentForm.uni_id} onChange={e => setEditStudentForm({ ...editStudentForm, uni_id: e.target.value })} />
+                    </div>
+                    <div className="gap-2 flex flex-col">
+                      <Label className="text-xs font-mono uppercase text-muted-foreground">Full Name</Label>
+                      <Input value={editStudentForm.name} onChange={e => setEditStudentForm({ ...editStudentForm, name: e.target.value })} />
+                    </div>
+                    <div className="gap-2 flex flex-col">
+                      <Label className="text-xs font-mono uppercase text-muted-foreground">12-Digit Hex RFID</Label>
+                      <Input value={editStudentForm.rfid_tag || ""} onChange={e => setEditStudentForm({ ...editStudentForm, rfid_tag: e.target.value })} maxLength={12} />
+                    </div>
+                  </div>
+                )}
+                <DialogFooter>
+                  <Button onClick={handleUpdateStudent} className="w-full bg-accent-orange text-white hover:bg-[#c95028]">Update Student</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            
           </TabsContent>
 
           {/* BOOKS TAB */}
@@ -286,11 +396,12 @@ export default function AdminDashboard() {
                     <TableHead className="font-serif font-bold text-foreground">Title & Author</TableHead>
                     <TableHead className="font-serif font-bold text-foreground font-mono text-xs">RFID TAG</TableHead>
                     <TableHead className="font-serif font-bold text-foreground text-right">Status</TableHead>
+                    <TableHead className="font-serif font-bold text-foreground text-center">Edit</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {books.length === 0 ? (
-                    <TableRow><TableCell colSpan={4} className="text-center py-10 text-muted-foreground">No books found in catalog.</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center py-10 text-muted-foreground">No books found in catalog.</TableCell></TableRow>
                   ) : (
                     books.map((b) => (
                       <TableRow key={b.id} className="hover:bg-secondary/20">
@@ -305,12 +416,47 @@ export default function AdminDashboard() {
                             {b.status}
                           </span>
                         </TableCell>
+                        <TableCell className="text-center">
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-accent-orange" 
+                            onClick={() => { setEditBookForm(b); setOpenEditBook(true); }}>
+                            <Edit2 className="h-3 w-3" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
                 </TableBody>
               </Table>
             </div>
+            
+            {/* Edit Book Dialog */}
+            <Dialog open={openEditBook} onOpenChange={setOpenEditBook}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle className="font-serif text-xl border-b pb-4">Edit Book Details</DialogTitle>
+                </DialogHeader>
+                {editBookForm && (
+                  <div className="grid gap-4 py-4">
+                    <div className="gap-2 flex flex-col">
+                      <Label className="text-xs font-mono uppercase text-muted-foreground">Title</Label>
+                      <Input value={editBookForm.title} onChange={e => setEditBookForm({ ...editBookForm, title: e.target.value })} />
+                    </div>
+                    <div className="gap-2 flex flex-col">
+                      <Label className="text-xs font-mono uppercase text-muted-foreground">Author</Label>
+                      <Input value={editBookForm.author} onChange={e => setEditBookForm({ ...editBookForm, author: e.target.value })} />
+                    </div>
+                    <div className="gap-2 flex flex-col">
+                      <Label className="text-xs font-mono uppercase text-muted-foreground">12-Digit Hex RFID</Label>
+                      <Input value={editBookForm.rfid_tag} onChange={e => setEditBookForm({ ...editBookForm, rfid_tag: e.target.value })} maxLength={12} />
+                    </div>
+                  </div>
+                )}
+                <DialogFooter>
+                  <Button onClick={handleUpdateBook} className="w-full bg-ink text-white hover:bg-ink2">Update Book</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
           </TabsContent>
         </Tabs>
       </div>
