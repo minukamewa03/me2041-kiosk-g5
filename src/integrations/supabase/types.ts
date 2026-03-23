@@ -88,6 +88,7 @@ export type Database = {
           password_hash: string
           rfid_tag: string | null
           uni_id: string
+          is_admin: boolean | null
         }
         Insert: {
           created_at?: string | null
@@ -96,6 +97,7 @@ export type Database = {
           password_hash: string
           rfid_tag?: string | null
           uni_id: string
+          is_admin?: boolean | null
         }
         Update: {
           created_at?: string | null
@@ -104,6 +106,7 @@ export type Database = {
           password_hash?: string
           rfid_tag?: string | null
           uni_id?: string
+          is_admin?: boolean | null
         }
         Relationships: []
       }

@@ -17,6 +17,7 @@ export interface Member {
   uni_id: string;
   name: string;
   rfid_tag: string | null;
+  is_admin: boolean;
   borrowed: string[];
 }
 
@@ -113,6 +114,7 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
         uni_id: member.uni_id,
         name: member.name,
         rfid_tag: member.rfid_tag ?? null,
+        is_admin: member.is_admin ?? false,
         borrowed: borrowedData?.map(b => b.book_id) ?? [],
       });
       return null;

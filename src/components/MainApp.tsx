@@ -51,6 +51,14 @@ export default function MainApp() {
           </h2>
         </div>
         <div className="flex items-center gap-4">
+          {currentUser?.is_admin && (
+            <button
+              onClick={() => window.location.href = '/admin'}
+              className="bg-accent-orange border-none text-white font-sans text-xs px-3.5 py-1.5 rounded-lg cursor-pointer transition-all hover:bg-[#c95028]"
+            >
+              Admin Portal
+            </button>
+          )}
           <div className="bg-[hsl(0_0%_100%/0.08)] border border-[hsl(0_0%_100%/0.12)] rounded-lg px-3.5 py-1.5 text-xs font-mono text-cream">
             Logged in as <span className="text-accent-orange-light">{currentUser?.uni_id}</span>
           </div>
