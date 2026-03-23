@@ -34,6 +34,15 @@ export default function BookCard({ book, onReserve }: Props) {
           <span className={`font-mono text-[10px] px-2.5 py-0.5 rounded-full font-medium tracking-[0.5px] ${config.tag}`}>
             {config.label}
           </span>
+          {book.slot_position ? (
+            <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-[0.5px] bg-accent-orange/15 text-accent-orange border border-accent-orange/20 flex items-center gap-1">
+              📍 In Kiosk: Slot {book.slot_position}
+            </span>
+          ) : (
+             <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full font-medium uppercase tracking-[0.5px] bg-secondary text-muted-foreground flex items-center gap-1">
+              📚 Library Stacks
+            </span>
+          )}
           {book.due_date && <span className="text-[10px] text-muted-foreground font-mono">Due {book.due_date}</span>}
         </div>
       </div>

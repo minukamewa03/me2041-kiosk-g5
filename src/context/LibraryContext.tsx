@@ -8,6 +8,7 @@ export interface Book {
   title: string;
   author: string;
   rfid_tag: string;
+  slot_position: number | null;
   status: BookStatus;
   due_date: string | null;
 }
@@ -58,6 +59,7 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
           title: b.title,
           author: b.author,
           rfid_tag: b.rfid_tag,
+          slot_position: b.slot_position,
           status: b.status as BookStatus,
           due_date: b.due_date,
         })));
@@ -77,7 +79,7 @@ export function LibraryProvider({ children }: { children: ReactNode }) {
             setBooks(prev =>
               prev.map(b =>
                 b.id === updated.id
-                  ? { ...b, status: updated.status as BookStatus, due_date: updated.due_date }
+                  ? { ...b, status: updated.status as BookStatus, due_date: updated.due_date, slot_position: updated.slot_position }
                   : b
               )
             );

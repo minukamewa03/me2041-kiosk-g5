@@ -3,6 +3,7 @@ import { useLibrary } from "@/context/LibraryContext";
 import BookCard from "@/components/BookCard";
 import ReserveModal from "@/components/ReserveModal";
 import ReserveBanner from "@/components/ReserveBanner";
+import KioskDigitalTwin from "@/components/KioskDigitalTwin";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -117,6 +118,9 @@ export default function MainApp() {
         {hasActiveReservation && (
           <ReserveBanner bookTitle={reservedBookTitle} seconds={reserveSeconds} />
         )}
+
+        {/* Live Active Kiosk Status Component */}
+        <KioskDigitalTwin />
 
         {searchResults !== null ? (
           <div>
